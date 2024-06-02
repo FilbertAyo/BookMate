@@ -1,0 +1,1 @@
+ /Users/filbertayo/development/BookMate/.dart_tool/flutter_build/65cd448294e445fc920f12080c463be4/native_assets.yaml: 
