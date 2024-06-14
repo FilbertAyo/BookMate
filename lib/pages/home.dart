@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:book_store/models/bookModel.dart';
+import 'package:book_store/models/bottomNavigation.dart';
 import 'package:book_store/pages/book.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,13 +46,15 @@ class _HomePageState extends State<HomePage>
          'History', 'Fiction', 'Comics & Graphic Novels',
         'Art', 'Religion', 'Philosophy', 'Action and Adventure', 'Poetry',
         'Biography', 'Young Adult Fiction', 'Romance', 'Mystery', 'Fantasy',
-        'Science', 'Childrens Fiction', 'Technology', 'Crime Fiction', 'Education',
+        'Science',
+         'Childrens Fiction',
+          'Technology', 'Crime Fiction', 'Education',
       ];
       final Map<String, List<Book>> booksByCategory = {};
 
       for (String category in categories) {
         final response = await http.get(Uri.parse(
-            'https://www.googleapis.com/books/v1/volumes?q=$category&key=$apiKey&startIndex=${random.nextInt(100)}'));
+            'https://www.googleapis.com/books/v1/volumes?q=$category&key=$apiKey&startIndex=${random.nextInt(10)}'));
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
@@ -223,6 +226,7 @@ class _HomePageState extends State<HomePage>
                 );
               }).toList(),
             ),
+              bottomNavigationBar: const BottomNavigation(),
     );
   }
 

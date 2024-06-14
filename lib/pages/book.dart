@@ -28,6 +28,7 @@ class _BookDetailsState extends State<BookDetails> {
           ],
         ),
       ),
+      
     );
   }
 

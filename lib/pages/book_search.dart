@@ -1,4 +1,5 @@
 
+import 'package:book_store/models/bottomNavigation.dart';
 import 'package:book_store/models/searchBook.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +30,7 @@ class _BookDetailsState extends State<BookDetails> {
           ],
         ),
       ),
+      //  bottomNavigationBar: const BottomNavigation(),
     );
   }
 

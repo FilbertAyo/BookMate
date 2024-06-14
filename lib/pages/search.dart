@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:book_store/models/bottomNavigation.dart';
 import 'package:book_store/pages/book_search.dart';
 import 'package:flutter/material.dart';
 
@@ -114,6 +115,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
         ],
       ),
+        bottomNavigationBar: const BottomNavigation(),
     );
   }
 

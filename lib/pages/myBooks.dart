@@ -1,3 +1,4 @@
+import 'package:book_store/models/bottomNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../models/action.dart';
@@ -56,6 +57,7 @@ class _MyBooksState extends State<MyBooks> {
           ],
         ),
       ),
+       bottomNavigationBar: const BottomNavigation(),
     );
   }
 

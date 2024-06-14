@@ -428,10 +428,10 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-06-02T22:59:06.468573Z",
+  "generated": "2024-06-14T09:06:26.169712Z",
   "generator": "pub",
-  "generatorVersion": "3.4.0",
+  "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/filbertayo/flutter",
-  "flutterVersion": "3.22.0",
+  "flutterVersion": "3.22.2",
   "pubCache": "file:///Users/filbertayo/.pub-cache"
 }

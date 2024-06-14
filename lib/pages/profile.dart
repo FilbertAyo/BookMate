@@ -1,3 +1,4 @@
+import 'package:book_store/models/bottomNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -111,6 +112,7 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
+       bottomNavigationBar: const BottomNavigation(),
     );
   }
 
