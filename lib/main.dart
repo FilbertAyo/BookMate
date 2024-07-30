@@ -2,8 +2,9 @@ import 'package:book_store/pages/home.dart';
 import 'package:book_store/pages/myBooks.dart';
 import 'package:book_store/pages/profile.dart';
 import 'package:book_store/pages/search.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,22 +20,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey[900],
       ),
-      home: const MainPage(),
+      home: MyHomePage(),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static List<Widget> _pages = <Widget>[
+  final List<Widget> _pages = <Widget>[
     HomePage(),
     SearchPage(),
     MyBooks(),
@@ -50,19 +51,22 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      backgroundColor: Colors.black,
+      body: _pages.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
-        color: const Color(0xff323232),
+        color: Color(0xff323232),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: GNav(
             backgroundColor: Color(0xff323232),
-            color: const Color(0xFFECECEC),
-            activeColor: const Color(0xFFECECEC),
+            color: Color(0xFFEEEEEE),
+            activeColor: Color(0xFFFF6500),
             tabBackgroundColor: Color.fromRGBO(66, 66, 66, 1),
             gap: 8,
             onTabChange: _onItemTapped,
-            padding: const EdgeInsets.all(16),
+            iconSize: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            duration: const Duration(milliseconds: 400),
             tabs: const [
               GButton(
                 icon: Icons.home,
@@ -74,11 +78,11 @@ class _MainPageState extends State<MainPage> {
               ),
               GButton(
                 icon: Icons.book,
-                text: 'My Books',
+                text: 'My books',
               ),
               GButton(
                 icon: Icons.account_circle,
-                text: 'Profile',
+                text: 'Account',
               ),
             ],
           ),

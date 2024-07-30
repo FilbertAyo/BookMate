@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:book_store/API/api.dart';
+import 'package:book_store/API/ui.dart';
+
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../models/action.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyBooks extends StatefulWidget {
   const MyBooks({Key? key});
@@ -10,103 +17,132 @@ class MyBooks extends StatefulWidget {
 }
 
 class _MyBooksState extends State<MyBooks> {
-  List<ActionModel> actions = [];
+  List<dynamic> book = [];
+
+  String? name;
+  String? email;
+  String? token;
 
   @override
   void initState() {
     super.initState();
-    _getActions();
+    _loadUserInfo();
+    fetchCartData();
   }
 
-  void _getActions() {
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      actions = ActionModel.getActions();
+      name = prefs.getString('name');
+      email = prefs.getString('email');
+      token = prefs.getString('api_token');
     });
+  }
+
+  Future<void> fetchCartData() async {
+    // Call your API to fetch cart items
+    final result = await Api().getMyCart(route: '/getMyCart');
+    final response = json.decode(result.body);
+
+    if (response['status']) {
+      setState(() {
+        book = response['data'];
+      });
+    } else {
+      throw Exception('Failed to load cart items');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    ScreenUi screenUi = ScreenUi(context);
     return Scaffold(
       appBar: _appBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              'My Books',
-              style: TextStyle(
-                color: Color(0xEEEEEEEE),
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.separated(
-                itemCount: actions.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 15),
-                itemBuilder: (context, index) {
-                  return _buildActionCard(actions[index]);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionCard(ActionModel action) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xff323232),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 100,
-            height: 120,
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: AssetImage(action.cover),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
+      body: token == null || token!.isEmpty || book.isEmpty
+          ? Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(
+                    Icons.menu_book_outlined,
+                    size: screenUi.scaleWidth(50.0),
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: screenUi.scaleWidth(5.0)),
                   Text(
-                    action.name,
-                    style: const TextStyle(
+                    "Your book list is empty",
+                    style: TextStyle(
+                        fontSize: screenUi.scaleWidth(12.0),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                ],
+              ),
+            )
+          : Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: screenUi.scaleWidth(8.0)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 5),
+                  Text(
+                    'My Books',
+                    style: TextStyle(
                       color: Color(0xEEEEEEEE),
-                      fontSize: 18,
+                      fontSize: screenUi.scaleWidth(18.0),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    action.year,
-                    style: const TextStyle(
-                      color: Color(0xEEEEEEEE),
+                  SizedBox(height: screenUi.scaleWidth(5.0)),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: book.length,
+                      itemBuilder: (context, index) {
+                        // final product = productData[index];
+                        return Card(
+                          color: const Color(0xff323232),
+                          elevation: 3,
+                          child: ListTile(
+                            leading: Image.network(
+                              '${book[index]['thumbnailUrl']}',
+                              fit: BoxFit.cover,
+
+                            ),
+                            title: Text(
+                              book[index]['title'],
+                              style:  TextStyle(color: Colors.white,     fontSize: screenUi.scaleWidth(10.0),),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book[index]['authors'],
+                                  style:  TextStyle(color: Colors.white,     fontSize: screenUi.scaleWidth(10.0),),
+                                ),
+                                Text(
+                                  book[index]['publishedDate'],
+                                  style: TextStyle(color: Colors.white,     fontSize: screenUi.scaleWidth(10.0),),
+                                ),
+                           
+                              ],
+                            ),
+                            trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.note_add,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () {}
+                                //  => deleteProduct(index),
+                                ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -120,27 +156,6 @@ class _MyBooksState extends State<MyBooks> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            // Navigate to search page
-          },
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              // color: const Color(0xEEEEEEEE),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SvgPicture.asset(
-              'assets/icons/search-svgrepo-com.svg',
-              height: 18,
-              width: 18,
-             color: const Color(0xEEEEEEEE),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

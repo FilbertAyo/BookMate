@@ -1,6 +1,12 @@
+import 'dart:convert';
+
+import 'package:book_store/API/api.dart';
 
 import 'package:book_store/models/searchBook.dart';
+import 'package:book_store/pages/login.dart';
+import 'package:book_store/pages/upcoming.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetails extends StatefulWidget {
@@ -14,6 +20,58 @@ class BookDetails extends StatefulWidget {
 
 class _BookDetailsState extends State<BookDetails> {
   bool isOverviewSelected = true;
+
+  Future<String?> retrieveAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('api_token');
+  }
+
+  Future<void> _checkLoginStatus() async {
+    String? token = await retrieveAuthToken();
+
+    if (token != null) {
+      // Token exists, add to list
+      _addToList();
+    } else {
+      // No token found, navigate to Login Page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
+  }
+
+  Future<void> _addToList() async {
+    final data = {
+      'title': widget.book.title.toString(),
+      'authors': widget.book.authors.toString(),
+      'publisher': widget.book.publisher.toString(),
+      // 'description': widget.book.description,
+      'categories': widget.book.categories.toString(),
+      'thumbnailUrl': widget.book.thumbnailUrl,
+      'publishedDate': widget.book.publishedDate.toString(),
+    };
+    final result = await Api().postToCartData(route: '/addToCart', data: data);
+    final response = jsonDecode(result.body);
+
+    if (response['status']) {
+      // Successfully added to the database
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: const Text('Book added to list successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      // Failed to add to the database
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to add book to list.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +87,7 @@ class _BookDetailsState extends State<BookDetails> {
           ],
         ),
       ),
+      //  bottomNavigationBar: const BottomNavigation(),
     );
   }
 
@@ -194,9 +253,7 @@ class _BookDetailsState extends State<BookDetails> {
                   color: Color(0xFFFF6500),
                   size: 40,
                 ),
-                onPressed: () {
-                  // Add to list action
-                },
+            onPressed: _checkLoginStatus,
               ),
               const Text(
                 'Add to List',
@@ -240,9 +297,13 @@ class _BookDetailsState extends State<BookDetails> {
                   color: Color(0xFFFF6500),
                   size: 40,
                 ),
-                onPressed: () {
-                  // Rating action
-                },
+                       onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Upcoming()),
+                          );
+                        },
               ),
               const Text(
                 'book',

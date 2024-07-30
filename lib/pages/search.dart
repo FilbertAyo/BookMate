@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:book_store/API/ui.dart';
 import 'package:book_store/pages/book_search.dart';
 import 'package:flutter/material.dart';
 
@@ -68,25 +70,30 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUi screenUi = ScreenUi(context);
     return Scaffold(
       appBar: appBar(),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _searchField()),
-          const SliverPadding(padding: EdgeInsets.only(top: 20)),
-          const SliverToBoxAdapter(
+          SliverPadding(
+              padding: EdgeInsets.only(top: screenUi.scaleWidth(10.0))),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(left: 10),
+              padding: EdgeInsets.only(
+                  left: screenUi.scaleWidth(8.0),
+                  right: screenUi.scaleWidth(8.0)),
               child: Text(
                 'Results',
                 style: TextStyle(
                   color: Color(0xEEEEEEEE),
-                  fontSize: 20,
+                  fontSize: screenUi.scaleWidth(18.0),
                 ),
               ),
             ),
           ),
-          const SliverPadding(padding: EdgeInsets.only(top: 10)),
+          SliverPadding(
+              padding: EdgeInsets.only(top: screenUi.scaleWidth(8.0))),
           isLoading
               ? const SliverToBoxAdapter(
                   child: Center(
@@ -97,8 +104,11 @@ class _SearchPageState extends State<SearchPage> {
                 )
               : SliverToBoxAdapter(
                   child: Container(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    height: 260, // Adjust height to fit the content
+                    padding: EdgeInsets.only(
+                        left: screenUi.scaleWidth(8.0),
+                        right: screenUi.scaleWidth(8.0)),
+                    height: screenUi
+                        .scaleWidth(220.0), // Adjust height to fit the content
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: searchResults.length,
@@ -106,8 +116,8 @@ class _SearchPageState extends State<SearchPage> {
                         final book = searchResults[index];
                         return _buildBookItem(book);
                       },
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 10,
+                      separatorBuilder: (context, index) => SizedBox(
+                        width: screenUi.scaleWidth(8.0),
                       ),
                     ),
                   ),
@@ -118,6 +128,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildBookItem(SearchBook book) {
+    ScreenUi screenUi = ScreenUi(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -129,21 +140,22 @@ class _SearchPageState extends State<SearchPage> {
       },
       child: Container(
         child: Container(
-          width: 150,
+          width: screenUi.scaleWidth(130.0),
           decoration: BoxDecoration(
-            color: const Color(0xff323232),
-            borderRadius: BorderRadius.circular(12),
+            color: Color(0xff323232),
+            borderRadius: BorderRadius.circular(screenUi.scaleWidth(8.0)),
           ),
           child: Stack(
             children: [
               Column(
                 children: [
                   Container(
-                    width: 140,
-                    height: 170,
-                    margin: const EdgeInsets.only(top: 5),
+                    width: screenUi.scaleWidth(120.0),
+                    height: screenUi.scaleWidth(150.0),
+                    margin: EdgeInsets.only(top: screenUi.scaleWidth(5.0)),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius:
+                          BorderRadius.circular(screenUi.scaleWidth(8.0)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.3),
@@ -154,7 +166,8 @@ class _SearchPageState extends State<SearchPage> {
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius:
+                          BorderRadius.circular(screenUi.scaleWidth(5.0)),
                       child: Image.network(
                         book.thumbnailUrl,
                         fit: BoxFit.cover,
@@ -162,13 +175,16 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                    padding: EdgeInsets.only(
+                        top: screenUi.scaleWidth(5.0),
+                        left: screenUi.scaleWidth(8.0),
+                        right: screenUi.scaleWidth(8.0)),
                     child: Center(
                       child: Text(
                         book.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xEEEEEEEE),
-                          fontSize: 12,
+                          fontSize: screenUi.scaleWidth(10.0),
                         ),
                       ),
                     ),
@@ -176,32 +192,32 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
               Positioned(
-                bottom: 5,
-                left: 10,
+                bottom: screenUi.scaleWidth(5.0),
+                left: screenUi.scaleWidth(5.0),
                 child: Text(
                   'Year: ${book.publishedDate}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color(0xFFFF6500),
-                    fontSize: 12,
+                    fontSize: screenUi.scaleWidth(10.0),
                   ),
                 ),
               ),
               Positioned(
-                bottom: 5,
-                right: 10,
+                bottom: screenUi.scaleWidth(5.0),
+                right: screenUi.scaleWidth(5.0),
                 child: Row(
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.star,
                       color: Colors.yellow,
-                      size: 16,
+                     size: screenUi.scaleWidth(10.0)
                     ),
                     const SizedBox(width: 4),
                     Text(
                       book.ratingsCount.toString(),
-                      style: const TextStyle(
+                      style:  TextStyle(
                         color: Color(0xEEEEEEEE),
-                        fontSize: 12,
+                        fontSize: screenUi.scaleWidth(10.0),
                       ),
                     ),
                   ],
@@ -215,8 +231,10 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Container _searchField() {
+    ScreenUi screenUi = ScreenUi(context);
     return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10),
+      margin: EdgeInsets.only(
+          left: screenUi.scaleWidth(8.0), right: screenUi.scaleWidth(8.0)),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
             color: const Color(0xFF393E46).withOpacity(0.11),
@@ -232,21 +250,21 @@ class _SearchPageState extends State<SearchPage> {
         decoration: InputDecoration(
             filled: true,
             fillColor: const Color(0xff323232),
-            contentPadding: const EdgeInsets.all(10),
+            contentPadding: EdgeInsets.all(screenUi.scaleWidth(8.0)),
             hintText: 'Search book',
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xEEEEEEEE),
-              fontSize: 18,
+              fontSize: screenUi.scaleWidth(16.0),
             ),
             prefixIcon: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(screenUi.scaleWidth(8.0)),
               child: SvgPicture.asset(
                 'assets/icons/search-svgrepo-com.svg',
                 color: const Color(0xEEEEEEEE),
               ),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(screenUi.scaleWidth(8.0)),
               borderSide: BorderSide.none,
             )),
       ),
@@ -256,32 +274,17 @@ class _SearchPageState extends State<SearchPage> {
   AppBar appBar() {
     return AppBar(
       backgroundColor: Colors.grey[900],
-      // centerTitle: true,
-      // title: const Text(
-      //   'Book Search',
-      //   style: TextStyle(
-      //     color: Color(0xEEEEEEEE),
-      //     fontSize: 20,
-      //   ),
-      // ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomePage()));
-        },
-        child: Container(
-          margin: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+      title: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Books mate',
+            style: TextStyle(
+              color: Color(0xFFFF6500),
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          child: SvgPicture.asset(
-            'assets/icons/left-arrow-backup-2-svgrepo-com.svg',
-            height: 15,
-            width: 15,
-            color: const Color(0xEEEEEEEE),
-          ),
-        ),
+        ],
       ),
     );
   }

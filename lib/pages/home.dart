@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:book_store/API/ui.dart';
 import 'package:book_store/models/bookModel.dart';
+
 import 'package:book_store/pages/book.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'search.dart';
+
+
 import 'package:http/http.dart' as http;
 
 const String apiKey = 'AIzaSyBvaguFsbt-tVR7qrrTXOTtZpKaqiaijZc';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -41,17 +43,22 @@ class _HomePageState extends State<HomePage>
 
     try {
       final categories = [
-        'Thriller', 'Horror',
-         'History', 'Fiction', 'Comics & Graphic Novels',
-        'Art', 'Religion', 'Philosophy', 'Action and Adventure', 'Poetry',
-        'Biography', 'Young Adult Fiction', 'Romance', 'Mystery', 'Fantasy',
-        'Science', 'Childrens Fiction', 'Technology', 'Crime Fiction', 'Education',
+        'Thriller',
+        'Horror',
+         'History',
+        // 'Fiction', 'Comics & Graphic Novels',
+
+        // 'Art', 'Religion', 'Philosophy', 'Action and Adventure', 'Poetry',
+        // 'Biography', 'Young Adult Fiction', 'Romance', 'Mystery', 'Fantasy',
+        // 'Science',
+        //  'Childrens Fiction',
+        //   'Technology', 'Crime Fiction', 'Education',
       ];
       final Map<String, List<Book>> booksByCategory = {};
 
       for (String category in categories) {
         final response = await http.get(Uri.parse(
-            'https://www.googleapis.com/books/v1/volumes?q=$category&key=$apiKey&startIndex=${random.nextInt(100)}'));
+            'https://www.googleapis.com/books/v1/volumes?q=$category&key=$apiKey&startIndex=${random.nextInt(10)}'));
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
@@ -78,6 +85,9 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+
+    ScreenUi screenUi = ScreenUi(context);
+
     super.build(context); // This ensures the mixin is properly integrated
 
     return Scaffold(
@@ -97,22 +107,22 @@ class _HomePageState extends State<HomePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, top: 5),
+                      padding: EdgeInsets.only(left: screenUi.scaleWidth(8.0)),
                       child: Text(
                         category,
-                        style: const TextStyle(
+                        style:  TextStyle(
                           color: Color(0xEEEEEEEE),
-                          fontSize: 20,
+                          fontSize: screenUi.scaleWidth(15.0),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                     SizedBox(height: screenUi.scaleWidth(8.0)),
                     Container(
-                      height: 260,
+                      height: screenUi.scaleWidth(220.0),
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        padding:  EdgeInsets.only(left: screenUi.scaleWidth(8.0), right: screenUi.scaleWidth(8.0)),
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
@@ -125,22 +135,22 @@ class _HomePageState extends State<HomePage>
                               );
                             },
                             child: Container(
-                              width: 150,
+                              width: screenUi.scaleWidth(130.0),
                               decoration: BoxDecoration(
                                 color: const Color(0xff323232),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(screenUi.scaleWidth(8.0)),
                               ),
                               child: Stack(
                                 children: [
                                   Column(
                                     children: [
                                       Container(
-                                        width: 140,
-                                        height: 170,
-                                        margin: const EdgeInsets.only(top: 5),
+                                        width: screenUi.scaleWidth(120.0),
+                                        height: screenUi.scaleWidth(150.0),
+                                        margin:  EdgeInsets.only(top: screenUi.scaleWidth(5.0)),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(screenUi.scaleWidth(8.0)),
                                           boxShadow: [
                                             BoxShadow(
                                               color:
@@ -153,7 +163,7 @@ class _HomePageState extends State<HomePage>
                                         ),
                                         child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(screenUi.scaleWidth(5.0)),
                                           child: Image.network(
                                             books[index].thumbnailUrl,
                                             fit: BoxFit.cover,
@@ -161,14 +171,14 @@ class _HomePageState extends State<HomePage>
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 5, left: 10, right: 10),
+                                        padding: EdgeInsets.only(
+                                            top: screenUi.scaleWidth(5.0), left: screenUi.scaleWidth(8.0), right: screenUi.scaleWidth(8.0)),
                                         child: Center(
                                           child: Text(
                                             books[index].title,
-                                            style: const TextStyle(
+                                            style:  TextStyle(
                                               color: Color(0xEEEEEEEE),
-                                              fontSize: 12,
+                                              fontSize: screenUi.scaleWidth(10.0),
                                             ),
                                           ),
                                         ),
@@ -176,32 +186,32 @@ class _HomePageState extends State<HomePage>
                                     ],
                                   ),
                                   Positioned(
-                                    bottom: 5,
-                                    left: 10,
+                                    bottom: screenUi.scaleWidth(5.0),
+                                    left: screenUi.scaleWidth(5.0),
                                     child: Text(
                                       'Year: ${books[index].publishedDate}',
-                                      style: const TextStyle(
+                                      style:  TextStyle(
                                         color: Color(0xFFFF6500),
-                                        fontSize: 12,
+                                        fontSize: screenUi.scaleWidth(10.0),
                                       ),
                                     ),
                                   ),
                                   Positioned(
-                                    bottom: 5,
-                                    right: 10,
+                                    bottom: screenUi.scaleWidth(5.0),
+                                    right: screenUi.scaleWidth(5.0),
                                     child: Row(
                                       children: [
-                                        const Icon(
+                                         Icon(
                                           Icons.star,
                                           color: Colors.yellow,
-                                          size: 16,
+                                          size: screenUi.scaleWidth(10.0),
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
                                           books[index].ratingsCount.toString(),
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: Color(0xEEEEEEEE),
-                                            fontSize: 12,
+                                            fontSize: screenUi.scaleWidth(10.0),
                                           ),
                                         ),
                                       ],
@@ -212,17 +222,18 @@ class _HomePageState extends State<HomePage>
                             ),
                           );
                         },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 10,
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: screenUi.scaleWidth(8.0),
                         ),
                         itemCount: books.length,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                     SizedBox(height: screenUi.scaleWidth(8.0)),
                   ],
                 );
               }).toList(),
             ),
+      // bottomNavigationBar: const BottomNavigation(),
     );
   }
 
@@ -241,30 +252,6 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      actions: [
-        GestureDetector(
-          child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()));
-            },
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              width: 37,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/search-svgrepo-com.svg',
-                height: 18,
-                width: 18,
-                color: const Color(0xEEEEEEEE),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
