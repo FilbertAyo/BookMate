@@ -1,0 +1,1 @@
+ C:\\development\\BookMate\\.dart_tool\\flutter_build\\0652d56a5147222b89526d5f18e7f674\\native_assets.yaml: 
