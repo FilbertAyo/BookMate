@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -98,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   const Text(
                     "Please login to your account or Register",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
@@ -121,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: const Text(
                       'Login',
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ],

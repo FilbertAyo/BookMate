@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 class BookDetails extends StatefulWidget {
   final Book book;
 
-  BookDetails({super.key, required this.book});
+  const BookDetails({super.key, required this.book});
 
   @override
   _BookDetailsState createState() => _BookDetailsState();
@@ -31,7 +31,7 @@ class _BookDetailsState extends State<BookDetails> {
   }
 
   Future<void> deleteAuthToken() async {
-    final prefs = await SharedPreferences.getInstance();
+    final  prefs = await SharedPreferences.getInstance();
     await prefs.remove('api_token');
   }
 
@@ -67,7 +67,7 @@ class _BookDetailsState extends State<BookDetails> {
       // Successfully added to the database
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: const Text('Book added to list successfully!'),
+          content: Text('Book added to list successfully!'),
           backgroundColor: Colors.green,
         ),
       );
@@ -92,7 +92,7 @@ class _BookDetailsState extends State<BookDetails> {
           children: [
             Stack(
               children: [
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height / 1.8,
                   width: double.infinity,
                   child: Image.network(
@@ -453,7 +453,7 @@ class _BookDetailsState extends State<BookDetails> {
                                 ),
                               ),
                               SizedBox(height: screenUi.scaleWidth(5.0)),
-                              Container(
+                              SizedBox(
                                 width: double.infinity,
                                 child: Text(
                                   widget.book.description,

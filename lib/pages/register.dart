@@ -295,7 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: _isRegistering
                         ? const CircularProgressIndicator()
                         : const Text("Register",
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                             )),

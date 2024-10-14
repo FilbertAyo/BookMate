@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 class BookDetails extends StatefulWidget {
   final SearchBook book;
 
-  BookDetails({super.key, required this.book});
+  const BookDetails({super.key, required this.book});
 
   @override
   _BookDetailsState createState() => _BookDetailsState();
@@ -58,7 +58,7 @@ class _BookDetailsState extends State<BookDetails> {
       // Successfully added to the database
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: const Text('Book added to list successfully!'),
+          content: Text('Book added to list successfully!'),
           backgroundColor: Colors.green,
         ),
       );
@@ -137,7 +137,7 @@ class _BookDetailsState extends State<BookDetails> {
                 " · ",
                 style: TextStyle(
                   fontSize: 20,
-                  color: const Color(0xEEEEEEEE),
+                  color: Color(0xEEEEEEEE),
                 ),
               ),
               Text(
@@ -151,7 +151,7 @@ class _BookDetailsState extends State<BookDetails> {
                 " · ",
                 style: TextStyle(
                   fontSize: 20,
-                  color: const Color(0xEEEEEEEE),
+                  color: Color(0xEEEEEEEE),
                 ),
               ),
               Text(
@@ -196,7 +196,7 @@ class _BookDetailsState extends State<BookDetails> {
   Widget bookImage() {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           height: MediaQuery.of(context).size.height / 1.8,
           width: double.infinity,
           child: Image.network(
@@ -257,7 +257,7 @@ class _BookDetailsState extends State<BookDetails> {
               ),
               const Text(
                 'Add to List',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   color: Color(0xEEEEEEEE),
                 ),
@@ -454,7 +454,7 @@ class _BookDetailsState extends State<BookDetails> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Text(
                           widget.book.description,
